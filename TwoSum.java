@@ -1,16 +1,22 @@
-import java.util.Arrays;
 import java.util.HashMap;
 
+/*
+ * try with hashmap
+*/
 public class TwoSum {
     public static int[] twoSum(int[] nums, int target) {
+        var hmp = new HashMap<Integer, Integer>(nums.length, 1);
+
         for(int i = 0; i<nums.length; i++) {
-            for(int j = i+1; j<nums.length; j++) {
-                if(nums[i] + nums[j] == target)
-                    return new int[] {i, j};
+            if(hmp.containsKey(target - nums[i])) {
+                return new int[] {hmp.get(target - nums[i]), i};
             }
+            hmp.put(nums[i], i);
         }
-        return new int[] {0, 0};
+
+        return new int[] {};
     }
+
 
     public static void main(String[] args) {
         int[] res = TwoSum.twoSum(
