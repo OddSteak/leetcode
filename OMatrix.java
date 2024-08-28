@@ -33,42 +33,55 @@ class OMatrix {
             }
         }
 
-        var distArr = new ArrayList<Integer>();
+        ArrayList<Integer> distArr = new ArrayList<>();
         ArrayList<Integer> futureForb;
 
         int dist = 0;
 
+        int nForb;
         for (int inc = 1; inc > -2; inc -= 2) {
-            futureForb = new ArrayList<Integer>();
+            futureForb = new ArrayList<>();
             futureForb.add(i);
             futureForb.add(j+inc);
+
+            nForb = forb.size();
             if (!forb.contains(futureForb)) {
                 dist = recFind(mat, i, j + inc, counter + 1, forb);
+                if (dist == counter + 2) return counter+2;
+                if (dist != -1) distArr.add(dist);
+
+                // remove the newly added forbidden values
+                for (int r = nForb; r < forb.size(); r++) {
+                    forb.remove(r);
+                }
                 if (counter == 0) {
                     forb.clear();
                     forb.add(new ArrayList<Integer>(Arrays.asList(i, j)));
                 }
-                if (dist == counter + 2) return counter+2;
-                if (dist != -1) distArr.add(dist);
             }
 
-            futureForb = new ArrayList<Integer>();
+            futureForb = new ArrayList<>();
             futureForb.add(i+inc);
             futureForb.add(j);
+            nForb = forb.size();
             if (!forb.contains(futureForb)) {
                 dist = recFind(mat, i + inc, j, counter + 1, forb);
+                if (dist == counter + 2) return counter+2;
+                if (dist != -1) distArr.add(dist);
+
+                for (int r = nForb; r < forb.size(); r++) {
+                    forb.remove(r);
+                }
                 if (counter == 0) {
                     forb.clear();
                     forb.add(new ArrayList<Integer>(Arrays.asList(i, j)));
                 }
-                if (dist == counter + 2) return counter+2;
-                if (dist != -1) distArr.add(dist);
             }
         }
 
         int low = mat.length * 2;
         for (int c = 0; c<distArr.size(); c++) {
-            if (distArr.get(c) < low) low = distArr.get(c);
+            low = distArr.get(c) < low ? distArr.get(c) : low;
         }
 
         return low;
