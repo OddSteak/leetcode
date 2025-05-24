@@ -15,18 +15,19 @@ class Solution {
             left = i + 1;
 
             while (left < right) {
-                if ((left - 1 != i && nums[left - 1] == nums[left]) || nums[left] + nums[right] < target) {
+                if (nums[left] + nums[right] < target) {
                     left++;
                     continue;
                 }
 
-                if ((right + 1 < nums.length && nums[right + 1] == nums[right]) || nums[left] + nums[right] > target) {
+                if (nums[left] + nums[right] > target) {
                     right--;
                     continue;
                 }
 
-                List<Integer> arr = new ArrayList<>(Arrays.asList(nums[i], nums[left++], nums[right--]));
-                retArr.add(arr);
+                List<Integer> arr = Arrays.asList(nums[i], nums[left++], nums[right--]);
+                if (retArr.size() == 0 || !arr.equals(retArr.get(retArr.size() - 1)))
+                    retArr.add(arr);
             }
         }
 

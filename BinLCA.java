@@ -6,8 +6,7 @@ public class TreeNode {
 }
 
 class BinLCA {
-    public TreeNode lowestCommonAncestor(
-                            TreeNode root, Treenode p, TreeNode q) {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null) return null;
         if (root == p || root == q) return root;
 
