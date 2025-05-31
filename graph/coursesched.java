@@ -33,31 +33,33 @@ class Solution {
             g.addEdge(pre[0], pre[1]);
 
         for (int i = 0; i < numCourses; i++) {
-            if (status[i] == 0) {
-                if (!canFinishDfs(status, g, i)) {
+            // process all unexplored nodes
+            if (status[i] == 0 && !canFinishDfs(status, g, i))
                     return false;
-                }
-            }
         }
 
         return true;
     }
 
-    public boolean canFinishDfs(int[] status, Graph g, int i) {
-        if (status[i] == 1)
+    public boolean canFinishDfs(int[] status, Graph g, int node) {
+        // node is in current path
+        if (status[node] == 1)
             return false;
 
-        if (status[i] == 2)
+        // node is in a previously explored path
+        if (status[node] == 2)
             return true;
 
-        status[i] = 1;
+        // visit the node
+        status[node] = 1;
 
-        for (int neigh: g.getNeighbours(i)) {
+        for (int neigh: g.getNeighbours(node)) {
             if (!canFinishDfs(status, g, neigh))
                 return false;
         }
 
-        status[i] = 2;
+        // mark node processed
+        status[node] = 2;
         return true;
     }
 
