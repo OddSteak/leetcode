@@ -5,88 +5,46 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 class Node {
-    public int pos;
-    public int len;
+    public String val;
+    public int lvl;
 
-    Node(int pos, int len) {
-        this.pos = pos;
-        this.len = len;
-    }
-}
-
-class Graph {
-    private List<List<Integer>> adj;
-    String beginWord;
-    List<String> wordList;
-
-    Graph(String beginWord, List<String> wordList) {
-        this.beginWord = beginWord;
-        this.wordList = wordList;
-        this.adj = new ArrayList<>(1 + wordList.size());
-
-        for (int i = 0; i < 1 + wordList.size(); i++) {
-            adj.add(new ArrayList<Integer>());
-        }
-
-        for (int i = -1; i < wordList.size(); i++) {
-            for (int j = i + 1; j < wordList.size(); j++) {
-                if (i == -1) {
-                    if (isConnected(beginWord, wordList.get(j)))
-                        addEdge(i + 1, j + 1);
-                } else if (isConnected(wordList.get(i), wordList.get(j))) {
-                    addEdge(i + 1, j + 1);
-                }
-            }
-        }
-    }
-
-    void addEdge(int u, int v) {
-        adj.get(u).add(v);
-        adj.get(v).add(u);
-    }
-
-    List<Integer> getIncidentEdges(int u) {
-        return adj.get(u);
-    }
-
-    String getValue(int u) {
-        return u == 0 ? beginWord : wordList.get(u - 1);
-    }
-
-    private boolean isConnected(String u, String v) {
-        int diff = 0;
-
-        for (int i = 0; i < u.length(); i++) {
-            if (u.charAt(i) != v.charAt(i)) {
-                if (++diff > 1)
-                    return false;
-            }
-        }
-
-        return diff == 1;
+    Node(String val, int lvl) {
+        this.val = val;
+        this.lvl = lvl;
     }
 }
 
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        Graph g = new Graph(beginWord, wordList);
+        Set<String> wordSet = new HashSet<>(wordList);
+        wordSet.add(beginWord);
+
+        if (!wordSet.contains(endWord))
+            return 0;
+
         Queue<Node> q = new LinkedList<>();
-        boolean[] visited = new boolean[1 + wordList.size()];
-        q.add(new Node(0, 0));
+        q.add(new Node(beginWord, 0));
 
         while (!q.isEmpty()) {
             Node cur = q.remove();
-            visited[cur.pos] = true;
+            wordSet.remove(cur.val);
 
-            if (g.getValue(cur.pos).equals(endWord))
-                return cur.len + 1;
+            if (cur.val.equals(endWord))
+                return cur.lvl + 1;
 
-            for (int e : g.getIncidentEdges(cur.pos)) {
-                if (!visited[e])
-                    q.add(new Node(e, cur.len + 1));
+            for (int i = 0; i < cur.val.length(); i++) {
+                for (char c = 'a'; c <= 'z'; c++) {
+                    char[] curArr = cur.val.toCharArray();
+                    curArr[i] = c;
+                    String next = new String(curArr);
+
+                    if (wordSet.contains(next))
+                        q.add(new Node(next, cur.lvl + 1));
+                }
             }
         }
 
