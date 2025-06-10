@@ -42,6 +42,7 @@ class Solution {
     }
 
     // 3 ms - chatgpt
+    // O(N), O(1)
     public int optimal(char[] tasks, int n) {
         int[] freq = new int[26];
         // build frequency list
@@ -68,6 +69,7 @@ class Solution {
     }
 
     // 21 ms - mine
+    // O(N log N), O(N)
     public int mySolution(char[] tasks, int n) {
         int cycles = 0;
         int[] freq = new int[26];
